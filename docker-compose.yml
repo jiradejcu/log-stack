@@ -7,17 +7,18 @@ services:
     volumes:
       - ./loki-config.yaml:/etc/loki/loki-config.yaml
       - ./loki:/loki
+    command: -config.file=/etc/loki/loki-config.yaml
     networks:
       - loki-net
   promtail:
     image: grafana/promtail:latest
     user: root
     volumes:
-      - /var/log:/var/log
-      - /etc/machine-id:/etc/machine-id
       - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
       - ./promtail:/tmp
+      - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: -config.file=/etc/promtail/promtail-config.yaml
     networks:
       - loki-net
   grafana:
