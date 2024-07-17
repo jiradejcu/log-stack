@@ -1,20 +1,20 @@
-version: '3'
+version: '3.7'
 services:
-  fluentd:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  loki:
+    image: grafana/loki:latest
     ports:
-      - "24224:24224"
-  influxdb:
-    image: influxdb:latest
-    ports:
-      - "8086:8086"
+      - 3100:3100
     volumes:
-      - ./influxdb:/var/lib/influxdb2
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml
+      - ./loki:/loki 
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
+      - ./promtail:/tmp
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
-      - ./grafana:/var/lib/grafana
+      - ./grafana:/var/lib/grafana 
