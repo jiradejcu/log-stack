@@ -13,9 +13,11 @@ services:
     image: grafana/promtail:latest
     user: root
     volumes:
+      - /var/log:/var/log
       - /etc/machine-id:/etc/machine-id
       - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
       - ./promtail:/tmp
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
     networks:
       - loki-net
   grafana:
