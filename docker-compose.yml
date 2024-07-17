@@ -6,15 +6,25 @@ services:
       - 3100:3100
     volumes:
       - ./loki-config.yaml:/etc/loki/loki-config.yaml
-      - ./loki:/loki 
+      - ./loki:/loki
+    networks:
+      - loki-net
   promtail:
     image: grafana/promtail:latest
+    user: root
     volumes:
+      - /etc/machine-id:/etc/machine-id
       - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
       - ./promtail:/tmp
+    networks:
+      - loki-net
   grafana:
     image: grafana/grafana:latest
     ports:
       - 3000:3000
     volumes:
-      - ./grafana:/var/lib/grafana 
+      - ./grafana:/var/lib/grafana
+    networks:
+      - loki-net
+networks:
+  loki-net:
